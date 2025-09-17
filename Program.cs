@@ -32,3 +32,9 @@ Console.WriteLine("Hello, World!");
 
 // MAYBE: Create Enviorment/Secret Variable Manager:
 // - Be able to store Encrypted values for use in your enviroment as needed. 
+
+//TODO: Toolbox Itenerary functionality
+// - Look up what tools you have in your enviorment, what they do, and when you should use them.
+// - This would simply be built ontop of the package manager and maybe the symlinker functionality.
+// - The idea of this is that, you always have your tools with you when you use rucksack, 
+// and it can be nice to be able to quickly look through what tools you have to solve a problem. 
