@@ -38,3 +38,10 @@ Console.WriteLine("Hello, World!");
 // - This would simply be built ontop of the package manager and maybe the symlinker functionality.
 // - The idea of this is that, you always have your tools with you when you use rucksack, 
 // and it can be nice to be able to quickly look through what tools you have to solve a problem. 
+
+//TODO: Make RuckSack start kit (a list of programd that is useful for the adverage developer)
+
+// NOTE: App Structure:
+// Logs - `$HOME/.local/state/[app]/logs/`
+// Config - `$HOME/.config/[app]`
+// Internal data storage - `~/.local/share/[app]/`
