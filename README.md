@@ -15,7 +15,7 @@
 - Is responsible for taking paths and placing configs in the paths defined.
 - The linker should also provide utility functions for things like removing files that exist with the same name, or maybe store the ones you deleted in a backup, in case you wanted it.
 
-**TODO: Create Sym Link Manager:**
+**Create Sym Link Manager:**
 - Manages what configs were linked, and handles any operations on the linked configs.
 - Might be able to make this a singleton.
 - Should be able to handle operations like, remove symlinked files and even do things like only remove specific sym links by priority level and maybe even place back here any files that were replaced via rucksack.
@@ -41,9 +41,10 @@
 - The idea of this is that, you always have your tools with you when you use rucksack, 
 and it can be nice to be able to quickly look through what tools you have to solve a problem. 
 
-TODO: Make RuckSack start kit (a list of programd that is useful for the adverage developer)
+**Make RuckSack start kit** (a list of programd that is useful for the adverage developer):
 
 ## File Output and Config locations
+
 NOTE: App Structure:
 Logs - `$HOME/.local/state/[app]/logs/`
 Config - `$HOME/.config/[app]`
