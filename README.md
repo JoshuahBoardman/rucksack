@@ -43,9 +43,13 @@ and it can be nice to be able to quickly look through what tools you have to sol
 
 **Make RuckSack start kit** (a list of programd that is useful for the adverage developer):
 
+**MAYBE File encryption/compression**
+- Options to compress and encrypt files stored within rucksacks folder.    
+
 ## File Output and Config locations
 
 NOTE: App Structure:
 Logs - `$HOME/.local/state/[app]/logs/`
 Config - `$HOME/.config/[app]`
-Internal data storage - `~/.local/share/[app]/`
+Internal data storage (state) - `~/.local/share/[app]/`
+dotFiles folder includes (manifest) - Any folder location (common `~/.dotFiles`
