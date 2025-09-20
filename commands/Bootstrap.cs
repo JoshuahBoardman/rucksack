@@ -1,5 +1,7 @@
 using System.CommandLine;
+using System.Text.Json;
 using System.IO;
+using Rucksack.Services.Manifest;
 
 namespace Rucksack.Commands.Bootstrap
 {
@@ -24,25 +26,19 @@ namespace Rucksack.Commands.Bootstrap
             };
             bootstrapCommand.Arguments.Add(pathArgument);
 
-            bootstrapCommand.SetAction(parseResult => Handle(parseResult.GetValue(pathArgument)));
+            bootstrapCommand.SetAction(parseResult => Handler(parseResult.GetValue(pathArgument)));
 
             return bootstrapCommand;
         }
 
-        private static void Handle(string pathArg)
+        // TODO: Handler method:
+        // 1. Get file.
+        // 2. Convert file json into a manifest object.
+        // 3. Use the manifest object to 
+        private static void Handler(string pathArg)
         {
-            string manifestPath = $"{pathArg}/manifest.json";
-            try
-            {
-                string fileText = File.ReadAllText(manifestPath);
-                Console.WriteLine(fileText);
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine(
-                    $"Error: Could not read manifest file at '{manifestPath}'. \n Reason: {ex.Message}"
-                );
-            }
+            var manifest = new ManifestService(pathArg);
+            manifest.Load();
         }
     }
 }
