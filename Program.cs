@@ -1,4 +1,4 @@
-﻿namespace rucksack;
+﻿namespace Rucksack;
 
 using System.CommandLine;
 
@@ -14,40 +14,13 @@ class Program
 
         //TODO: make rucksack class.
 
-        //TODO: make command namespace and add commands a files in the command directory
+        //TODO: make command namespace and add commands a files in the command directoryp
 
         //NOTE: Rucksack - Root Command
         RootCommand rucksack = new("Bring your developer enviorment everywhere you go.");
 
-        //NOTE: dotfiles - Command Group 
-        Command dotFilesCommand = new("dotfiles", "Manage your enviorment dotFiles.");
-        rucksack.Subcommands.Add(dotFilesCommand);
-
-        //NOTE: Config - Action Command 
-        Command manifestCommand = new("manifest", "Returns all a list of dotFiles managed under rucksack."); //TODO: Might be worth making this recursive on all command groups. 
-        dotFilesCommand.Subcommands.Add(manifestCommand);
-
-        //NOTE: Config - Manifest Options 
-        Option<bool> verboseOption = new("--verbose")
-        {
-            Description = "Increases the amount of information provided from the manifest",
-        };
-        manifestCommand.Options.Add(verboseOption);
-
-
-        // NOTE: Config - Set actions for leaf commands
-        manifestCommand.SetAction(parseResult => ReadConfig(
-            configPath,
-                parseResult.GetValue(verboseOption)
-        ));
-
-        //NOTE: Package - Command Group 
-        Command packageCommand = new("packages", "Manage your enviorment packages.");
-        rucksack.Subcommands.Add(packageCommand);
-
-        //NOTE: All - Command Group 
-        Command allCommand = new("all", "Manage everything in your enviorment at the same time.");
-        rucksack.Subcommands.Add(allCommand);
+        //NOTE: This is how 
+        rucksack.Subcommands.Add(Commands.Bootstrap.BootstrapCommand.Build());
 
         return rucksack.Parse(args).Invoke();
     }
