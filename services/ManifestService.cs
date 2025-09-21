@@ -20,10 +20,11 @@ namespace Rucksack.Services.Manifest
     class ManifestService
     {
         private readonly string _manifestPath;
+        public Manifest? Manifest { get; set; }
 
         public ManifestService(string manifestPath)
         {
-            var manifestFileName = "manifest.json"; //TODO: Cehck if they inlucde the `/` at the end of the path
+            var manifestFileName = "manifest.json"; //TODO: Check if they inlucde the `/` at the end of the path
             _manifestPath = $"{manifestPath}/{manifestFileName}";
         }
 
@@ -41,25 +42,20 @@ namespace Rucksack.Services.Manifest
 
                 var manifest = JsonSerializer.Deserialize<Manifest>(rawManifestText, jsonOptions);
 
+                //TODO: Clean up this error handling to contain better error messages
                 if (manifest == null)
                 {
                     Console.Error.WriteLine("Manifest is null");
                     return;
                 }
 
-                if (manifest.DotFiles == null || manifest.DotFiles.Count == 0)
+                if (manifest == null || manifest.DotFiles.Count == 0)
                 {
                     Console.Error.WriteLine("No dotFiles provided");
                     return;
                 }
 
-                Console.WriteLine("Linking these packages");
-
-
-                foreach (DotFile dotFile in manifest.DotFiles)
-                {
-                    Console.WriteLine(dotFile.Name);
-                }
+                this.Manifest = manifest;
             }
 
             catch (Exception ex)

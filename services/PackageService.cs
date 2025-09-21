@@ -6,7 +6,7 @@ namespace Rucksack.Services.Packages
     {
         public List<Package> Packages { get; set; } = new();
 
-        PackageService(List<Package> packages)
+        public PackageService(List<Package> packages)
         {
             this.Packages = packages;
         }
