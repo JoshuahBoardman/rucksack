@@ -1,4 +1,5 @@
 using Rucksack.Types;
+using Rucksack.Services.PackageManagement;
 
 namespace Rucksack.Services.Packages
 {

@@ -47,12 +47,18 @@ namespace Rucksack.Commands.Bootstrap
             var manifestService = new ManifestService(pathArg);
             manifestService.Load();
 
+            var packageManagerService = new PackageManagerService(manifestService.Manifest.PackageManagers);
+
+            var packageService = new PackageService(manifestService.Manifest.Packages);
+            foreach (var package in packageService.Packages)
+            {
+                packageManagerService.Install(package);
+            }
+
+            //TODO: MAYBE: Do some type of check to see if the package is installed before 
+            //adding the corisponding dotFile.
             var dotFilesService = new DotFilesService(manifestService.Manifest.DotFiles);
             dotFilesService.LinkFiles(pathArg);
-
-            //TODO: Install packages
-            //var packageService = new PackageService(manifestService.Manifest.Packages);
-
         }
     }
 }

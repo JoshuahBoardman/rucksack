@@ -7,9 +7,17 @@ namespace Rucksack.Types;
 },
 */
 
-class PackageManager
+/*class PackageManager
 {
     public string InstallCommand { set; get; }
     public string UpdateCommand { set; get; }
+}*/
+
+class PackageManager
+{
+    public string Command { get; set; }
+    public string InstallArgs { get; set; }
+    public string? updateArgs { get; set; }
+    public string? uninstallArgs { get; set; }
 
 }
