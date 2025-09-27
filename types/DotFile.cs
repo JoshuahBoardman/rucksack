@@ -1,18 +1,10 @@
 namespace Rucksack.Types;
 
-/*  DotFile Example
-{
-"name": ".zshrc",
-"target": "~/.zshrc",
-"priority": "high",
-"override": "hard"
-}*/
-
 class DotFile
 {
-    public string Name { set; get; }
-    public string Target { set; get; }
-    public string Priority { set; get; } //TODO: Make this an enum of hight, medium, low
-    public string? Override { set; get; }
+    public required string Source { get; set; }
+    public required string Target { get; set; }
+    public required string Type { get; set; } // Make this an enum for file or folder
+    public string? Override { get; set; }
 }
 

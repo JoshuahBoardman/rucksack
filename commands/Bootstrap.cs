@@ -35,13 +35,6 @@ namespace Rucksack.Commands.Bootstrap
             return bootstrapCommand;
         }
 
-        // TODO: Handler method:
-        // 1. Get file.
-        // 2. Convert file json into a manifest object.
-        // 3. Use the manifest object to create instances of the Package, DotFiles, and PackageManager services.
-        // 4. Use the DotFilesService, PackageService and PackageMangerServices to setup the enviorment.
-        // 5. Save everything setup via bootstrap to the registry using the RegistryService.
-        // 6. Handle any bootstrap options.
         private static void Handler(string pathArg)
         {
             var manifestService = new ManifestService(pathArg);
@@ -49,16 +42,18 @@ namespace Rucksack.Commands.Bootstrap
 
             var packageManagerService = new PackageManagerService(manifestService.Manifest.PackageManagers);
 
-            var packageService = new PackageService(manifestService.Manifest.Packages);
-            foreach (var package in packageService.Packages)
+            foreach (var manifestItem in manifestService.Manifest.ManifestItems)
             {
-                packageManagerService.Install(package);
-            }
+                if (manifestItem.DotFile != null)
+                {
+                    DotFilesService.LinkFile(manifestItem.DotFile, pathArg);
+                }
 
-            //TODO: MAYBE: Do some type of check to see if the package is installed before 
-            //adding the corisponding dotFile.
-            var dotFilesService = new DotFilesService(manifestService.Manifest.DotFiles);
-            dotFilesService.LinkFiles(pathArg);
+                if (manifestItem.Package != null)
+                {
+                    packageManagerService.Install(manifestItem.Package);
+                }
+            }
         }
     }
 }

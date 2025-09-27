@@ -1,22 +1,10 @@
-using System.IO;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Rucksack.Types;
-
 namespace Rucksack.Services.Manifest
 {
+    using System.IO;
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+    using Rucksack.Types;
 
-    //TODO: Think about swapping DotFiles and Packages to dictionaries.
-    class Manifest
-    {
-        public List<DotFile> DotFiles { set; get; } = new();
-        public List<Package> Packages { set; get; } = new();
-        public Dictionary<string, PackageManager> PackageManagers { set; get; } = new();
-    }
-
-    // NOTE: Could make the ManifestService into a generic FileService which can work on any files
-
-    //TODO: WIll likely need to make this a singleton and pass it in as DI
     class ManifestService
     {
         private readonly string _manifestPath;
@@ -24,7 +12,7 @@ namespace Rucksack.Services.Manifest
 
         public ManifestService(string manifestPath)
         {
-            var manifestFileName = "manifest.json"; //TODO: Check if they inlucde the `/` at the end of the path
+            var manifestFileName = "manifest.json";
             _manifestPath = $"{manifestPath}/{manifestFileName}";
         }
 
@@ -41,19 +29,6 @@ namespace Rucksack.Services.Manifest
                 };
 
                 var manifest = JsonSerializer.Deserialize<Manifest>(rawManifestText, jsonOptions);
-
-                //TODO: Clean up this error handling to contain better error messages
-                if (manifest == null)
-                {
-                    Console.Error.WriteLine("Manifest is null");
-                    return;
-                }
-
-                if (manifest == null || manifest.DotFiles.Count == 0)
-                {
-                    Console.Error.WriteLine("No dotFiles provided");
-                    return;
-                }
 
                 this.Manifest = manifest;
             }

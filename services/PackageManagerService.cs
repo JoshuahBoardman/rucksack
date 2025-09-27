@@ -1,12 +1,11 @@
-using System.Diagnostics;
-using Rucksack.Types;
-using Rucksack.Utils.Template;
-using Rucksack.Utils.Command;
-
-//TODO: IMPORTANT: I must figure out a solution to being able to corispond a package to 
-//multiple possible package managers with the correct package name.
+//TODO: IMPORTANT: Need to find a way to support different package manager per package depending on enviorment
 namespace Rucksack.Services.PackageManagement
 {
+    using System.Diagnostics;
+    using Rucksack.Types;
+    using Rucksack.Utils.Template;
+    using Rucksack.Utils.Command;
+
     class PackageManagerService
     {
         public Dictionary<string, PackageManager> PackageManagers { get; set; } = new();
@@ -22,7 +21,7 @@ namespace Rucksack.Services.PackageManagement
 
             Dictionary<TemplateVariable, string> packageValues = new()
          {
-            { TemplateVariable.Package, package.Name },
+            { TemplateVariable.Package, package.PackageName },
             { TemplateVariable.Version, package.Version }
      };
             string expandedInstallArgs = TemplateHelper.Expand(manager.InstallArgs, packageValues);
