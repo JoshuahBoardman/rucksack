@@ -1,10 +1,11 @@
 using System.Diagnostics;
+using Rucksack.Types;
 
 namespace Rucksack.Utils.Command
 {
     static public class CommandHelper
     {
-        static public void RunCommand(string command, string arguments)
+        static public CommandResult RunCommand(string command, string arguments)
         {
             var process = new Process()
             {
@@ -26,11 +27,14 @@ namespace Rucksack.Utils.Command
 
             process.WaitForExit();
 
-            if (!string.IsNullOrEmpty(output))
-                Console.WriteLine(output);
+            var result = new CommandResult
+            {
+                ExitCode = process.ExitCode,
+                StandardOutput = output,
+                StandardError = error
+            };
 
-            if (!string.IsNullOrEmpty(error))
-                Console.Error.WriteLine(error);
+            return result;
         }
     }
 

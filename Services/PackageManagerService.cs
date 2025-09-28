@@ -8,26 +8,33 @@ namespace Rucksack.Services.PackageManagement
 
     static class PackageManagerService
     {
-        /*public Dictionary<string, PackageManager> PackageManagers { get; set; } = new();
-
-        public PackageManagerService(Dictionary<string, PackageManager> packageManagers)
-        {
-            this.PackageManagers = packageManagers;
-        }*/
-
         static public void Install(Dictionary<string, PackageManager> managers, Package package)
         {
+            if (!managers.ContainsKey(package.Manager))
+            {
+                throw new InvalidOperationException($"No package manager defined for {package.Manager}.");
+            }
+
             var manager = managers[package.Manager];
 
-            Dictionary<TemplateVariable, string> packageValues = new()
-         {
-            { TemplateVariable.Package, package.PackageName },
-            { TemplateVariable.Version, package.Version }
-     };
+            var packageValues = new Dictionary<TemplateVariable, string>
+            {
+                [TemplateVariable.Package] = package.PackageName,
+                [TemplateVariable.Version] = package.Version
+            };
+
             string expandedInstallArgs = TemplateHelper.Expand(manager.InstallArgs, packageValues);
 
-            CommandHelper.RunCommand(manager.Command, expandedInstallArgs);
+            var result = CommandHelper.RunCommand(manager.Command, expandedInstallArgs);
 
+            if (!result.Success)
+            {
+                throw new InvalidOperationException(
+                    $"Package installation failed: {package.PackageName} via {package.Manager}\n" +
+                    $"Error: {result.StandardError}");
+            }
+
+            Console.WriteLine(result.StandardOutput);
         }
 
         static public void Update(Package package)
