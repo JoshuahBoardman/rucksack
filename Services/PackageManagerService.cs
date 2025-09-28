@@ -6,18 +6,18 @@ namespace Rucksack.Services.PackageManagement
     using Rucksack.Utils.Template;
     using Rucksack.Utils.Command;
 
-    class PackageManagerService
+    static class PackageManagerService
     {
-        public Dictionary<string, PackageManager> PackageManagers { get; set; } = new();
+        /*public Dictionary<string, PackageManager> PackageManagers { get; set; } = new();
 
         public PackageManagerService(Dictionary<string, PackageManager> packageManagers)
         {
             this.PackageManagers = packageManagers;
-        }
+        }*/
 
-        public void Install(Package package)
+        static public void Install(Dictionary<string, PackageManager> managers, Package package)
         {
-            var manager = this.PackageManagers[package.Manager];
+            var manager = managers[package.Manager];
 
             Dictionary<TemplateVariable, string> packageValues = new()
          {
@@ -30,12 +30,12 @@ namespace Rucksack.Services.PackageManagement
 
         }
 
-        public void Update(Package package)
+        static public void Update(Package package)
         {
 
         }
 
-        public void Remove(Package package)
+        static public void Remove(Package package)
         {
 
         }

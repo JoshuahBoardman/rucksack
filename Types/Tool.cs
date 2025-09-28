@@ -1,6 +1,6 @@
 namespace Rucksack.Types;
 
-class ManifestItem
+class Tool
 {
     public required string Name { get; set; }
     public required string Priority { get; set; } //Make this an enum

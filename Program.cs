@@ -10,12 +10,6 @@ class Program
         string configPath = Environment.GetEnvironmentVariable("RUCKSACK_CONFIG")
                             ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config", "rucksack", "config.json"); //TODO: Setup to handle windows as well. 
 
-        //TODO: Make a manifestPath property.
-
-        //TODO: make rucksack class.
-
-        //TODO: make command namespace and add commands a files in the command directoryp
-
         //NOTE: Rucksack - Root Command
         RootCommand rucksack = new("Bring your developer enviorment everywhere you go.");
 

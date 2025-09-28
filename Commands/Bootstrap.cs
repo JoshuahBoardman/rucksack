@@ -35,23 +35,23 @@ namespace Rucksack.Commands.Bootstrap
             return bootstrapCommand;
         }
 
+        // TODO: Command hanlders should handle errors and services should throw errors
+        // - Likely will have an error service.
         private static void Handler(string pathArg)
         {
             var manifestService = new ManifestService(pathArg);
             manifestService.Load();
 
-            var packageManagerService = new PackageManagerService(manifestService.Manifest.PackageManagers);
-
-            foreach (var manifestItem in manifestService.Manifest.ManifestItems)
+            foreach (var tool in manifestService.Manifest.Tools)
             {
-                if (manifestItem.DotFile != null)
+                if (tool.DotFile != null)
                 {
-                    DotFilesService.LinkFile(manifestItem.DotFile, pathArg);
+                    DotFilesService.LinkFile(tool.DotFile, pathArg);
                 }
 
-                if (manifestItem.Package != null)
+                if (tool.Package != null)
                 {
-                    packageManagerService.Install(manifestItem.Package);
+                    PackageManagerService.Install(tool.Package);
                 }
             }
         }
