@@ -49,9 +49,11 @@ namespace Rucksack.Commands.Bootstrap
                     DotFilesService.LinkFile(tool.DotFile, pathArg);
                 }
 
-                if (tool.Package != null)
+                var managers = manifestService.Manifest.PackageManagers;
+
+                if (tool.Package != null && managers != null)
                 {
-                    PackageManagerService.Install(tool.Package);
+                    PackageManagerService.Install(managers, tool.Package);
                 }
             }
         }

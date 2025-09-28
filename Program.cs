@@ -6,19 +6,29 @@ class Program
 {
     static int Main(string[] args)
     {
-        //TODO: Make this handle other formats than just JSON
-        string configPath = Environment.GetEnvironmentVariable("RUCKSACK_CONFIG")
-                            ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config", "rucksack", "config.json"); //TODO: Setup to handle windows as well. 
+        try
+        {
+            //TODO: Make this handle other formats than just JSON
+            string configPath = Environment.GetEnvironmentVariable("RUCKSACK_CONFIG")
+                                ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config", "rucksack", "config.json"); //TODO: Setup to handle windows as well. 
 
-        //NOTE: Rucksack - Root Command
-        RootCommand rucksack = new("Bring your developer enviorment everywhere you go.");
+            //NOTE: Rucksack - Root Command
+            RootCommand rucksack = new("Bring your developer enviorment everywhere you go.");
 
-        //NOTE: This is how 
-        rucksack.Subcommands.Add(Commands.Bootstrap.BootstrapCommand.Build());
+            //NOTE: This is how 
+            rucksack.Subcommands.Add(Commands.Bootstrap.BootstrapCommand.Build());
 
-        return rucksack.Parse(args).Invoke();
+            return rucksack.Parse(args).Invoke();
+        }
+        catch (Exception ex)
+        {
+            //TODO: Handle errors with error/log serivce
+            Console.Error.WriteLine($"Error: {ex.Message}");
+            return 1; // non-zero exit code for failure
+        }
     }
 
+    //TODO: What is this for???
     //TODO: Rewrite this so that it pulls specific data about the command Group and only gives minimal data unless verbose is specified.
     internal static void ReadConfig(string configPath, bool verbose)
     {

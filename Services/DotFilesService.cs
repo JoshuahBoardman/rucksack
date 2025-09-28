@@ -28,8 +28,7 @@ namespace Rucksack.Services.DotFiles
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Failed to symlink file.\n source: {sourcePath} \n target: {dotFile.Target} \n reason: {ex}");
-
+                    throw new InvalidOperationException($"Failed to symlink file.\nSource: {sourcePath}\nTarget: {dotFile.Target}\nReason: {ex.Message}", ex);
                 }
             }
         }
@@ -52,7 +51,7 @@ namespace Rucksack.Services.DotFiles
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"Failed to symlink file.\n source: {sourcePath} \n target: {dotFile.Target} \n reason: {ex}");
+                throw new InvalidOperationException($"Failed to symlink file.\nSource: {sourcePath}\nTarget: {dotFile.Target}\nReason: {ex.Message}", ex);
 
             }
         }
