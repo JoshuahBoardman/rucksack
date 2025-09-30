@@ -1,6 +1,6 @@
+
 namespace Rucksack.Utils.Template
 {
-
     public enum TemplateVariable
     {
         Package,
@@ -20,5 +20,4 @@ namespace Rucksack.Utils.Template
             return templateString;
         }
     }
-
 }
