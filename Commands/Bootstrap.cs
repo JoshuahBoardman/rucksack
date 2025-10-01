@@ -11,6 +11,7 @@ namespace Rucksack.Commands.Bootstrap
 {
     static class BootstrapCommand
     {
+        //TODO: Handle ToolCommand lifecysle hook/trigger.
         public static Command Build()
         {
             Command bootstrapCommand = new(
