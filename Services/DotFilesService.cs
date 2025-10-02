@@ -3,56 +3,67 @@ namespace Rucksack.Services.DotFiles
     using System.IO;
     using Rucksack.Types;
     using Rucksack.Utils.Path;
+    using Rucksack.Utils.User;
 
     static class DotFilesService
     {
-
-        //TODO: Think about the correct way to supply sourcePath here
-        static public void LinkAllFiles(List<DotFile> dotFiles, string sourcePath)
+        static public void LinkFile(DotFile dotFile, string sourcePath)
         {
-            string dotFilesPath = $"{sourcePath}/configs";
+            string dotFilesPath = Path.Combine(sourcePath, "configs");
+            string dotFileSource = Path.Combine(dotFilesPath, dotFile.Source);
 
-            foreach (var dotFile in dotFiles)
+            // TODO: handle passing home argument to RolverHome
+            string homePath = UserContextHelper.ResolveHome();
+            string expandedTargetPath = PathHelper.ExpandPath(dotFile.Target, homePath);
+
+            //TODO: Handle reruns to not link if file/folder are already linked and relink if arg is passed
+            //TODO: Verify if the file was added to the registry
+            //	- If link alredy exists, and is not in registry let the user know and communicate the 
+            //		args needed to add it to the registry and relink to the location listed in the manifest.
+
+            if (File.Exists(expandedTargetPath) || Directory.Exists(expandedTargetPath))
             {
-                string expandedTargetPath = PathHelper.ExpandPath(dotFile.Target);
-
+                if (PathHelper.IsSymlink(expandedTargetPath))
+                {
+                    //TODO: relink if argument is passed.
+                    Console.WriteLine($"{expandedTargetPath} symlink already exists");
+                }
+                else
+                {
+                    //TODO: Remove and and symlink if arument is passed.
+                    //TODO: Store removed file in holding to be put back latter if argument is passed.
+                    Console.WriteLine($"{expandedTargetPath} already exists but is not symlinked");
+                }
+            }
+            else
+            {
+                // TODO: check to see if parts of the path leading to the dotFile dont exist and create them.
+                // - Make a path walking function in pathhelper
                 try
                 {
-                    string dotFileSource = $"{dotFilesPath}/{dotFile.Source}";
-                    File.CreateSymbolicLink(expandedTargetPath, dotFileSource);
 
                     //TODO: Register these links with the registry.
+                    //TODO: make a Type enum
+                    if (Directory.Exists(dotFileSource) && dotFile.Type == "folder")
+                    {
+                        Directory.CreateSymbolicLink(expandedTargetPath, dotFileSource);
+                    }
+                    else if (File.Exists(dotFileSource) && dotFile.Type == "file")
+                    {
+                        File.CreateSymbolicLink(expandedTargetPath, dotFileSource);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Source type does not match manifest type for {dotFileSource}");
+                    }
 
-                    //TODO: Remove or improve this
+
                     Console.WriteLine($"Sym Linked: {dotFile.Source}");
                 }
                 catch (Exception ex)
                 {
                     throw new InvalidOperationException($"Failed to symlink file.\nSource: {sourcePath}\nTarget: {dotFile.Target}\nReason: {ex.Message}", ex);
                 }
-            }
-        }
-
-        static public void LinkFile(DotFile dotFile, string sourcePath)
-        {
-            string dotFilesPath = $"{sourcePath}/configs";
-
-            string expandedTargetPath = PathHelper.ExpandPath(dotFile.Target);
-
-            try
-            {
-                string dotFileSource = $"{dotFilesPath}/{dotFile.Source}";
-                File.CreateSymbolicLink(expandedTargetPath, dotFileSource);
-
-                //TODO: Register these links with the registry.
-
-                //TODO: Remove or improve this
-                Console.WriteLine($"Sym Linked: {dotFile.Source}");
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to symlink file.\nSource: {sourcePath}\nTarget: {dotFile.Target}\nReason: {ex.Message}", ex);
-
             }
         }
     }

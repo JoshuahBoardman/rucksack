@@ -4,4 +4,5 @@ class Manifest
 {
     public Dictionary<string, PackageManager>? PackageManagers { get; set; }
     public List<Tool>? Tools { get; set; }
+    public List<ToolCommand>? Commands { get; set; }
 }
