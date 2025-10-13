@@ -7,6 +7,7 @@ namespace Rucksack.Services.DotFiles
 
     static class DotFilesService
     {
+        //TODO: Refactor to only handle the linking of the file.
         static public void LinkFile(DotFile dotFile, string sourcePath)
         {
             string dotFilesPath = Path.Combine(sourcePath, "configs");
@@ -19,51 +20,31 @@ namespace Rucksack.Services.DotFiles
             //TODO: Handle reruns to not link if file/folder are already linked and relink if arg is passed
             //TODO: Verify if the file was added to the registry
             //	- If link alredy exists, and is not in registry let the user know and communicate the 
-            //		args needed to add it to the registry and relink to the location listed in the manifest.
+            //		args needed
 
-            if (File.Exists(expandedTargetPath) || Directory.Exists(expandedTargetPath))
+            // TODO: check to see if parts of the path leading to the dotFile dont exist and create them.
+            // - Make a path walking function in pathhelper
+            try
             {
-                if (PathHelper.IsSymlink(expandedTargetPath))
+                //TODO: make a Type enum
+                if (Directory.Exists(dotFileSource) && dotFile.Type == "folder")
                 {
-                    //TODO: relink if argument is passed.
-                    Console.WriteLine($"{expandedTargetPath} symlink already exists");
+                    Directory.CreateSymbolicLink(expandedTargetPath, dotFileSource);
+                }
+                else if (File.Exists(dotFileSource) && dotFile.Type == "file")
+                {
+                    File.CreateSymbolicLink(expandedTargetPath, dotFileSource);
                 }
                 else
                 {
-                    //TODO: Remove and and symlink if arument is passed.
-                    //TODO: Store removed file in holding to be put back latter if argument is passed.
-                    Console.WriteLine($"{expandedTargetPath} already exists but is not symlinked");
+                    Console.WriteLine($"Source type does not match manifest type for {dotFileSource}");
                 }
+
+                Console.WriteLine($"Sym Linked: {dotFile.Source}");
             }
-            else
+            catch (Exception ex)
             {
-                // TODO: check to see if parts of the path leading to the dotFile dont exist and create them.
-                // - Make a path walking function in pathhelper
-                try
-                {
-
-                    //TODO: Register these links with the registry.
-                    //TODO: make a Type enum
-                    if (Directory.Exists(dotFileSource) && dotFile.Type == "folder")
-                    {
-                        Directory.CreateSymbolicLink(expandedTargetPath, dotFileSource);
-                    }
-                    else if (File.Exists(dotFileSource) && dotFile.Type == "file")
-                    {
-                        File.CreateSymbolicLink(expandedTargetPath, dotFileSource);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Source type does not match manifest type for {dotFileSource}");
-                    }
-
-
-                    Console.WriteLine($"Sym Linked: {dotFile.Source}");
-                }
-                catch (Exception ex)
-                {
-                    throw new InvalidOperationException($"Failed to symlink file.\nSource: {sourcePath}\nTarget: {dotFile.Target}\nReason: {ex.Message}", ex);
-                }
+                throw new InvalidOperationException($"Failed to symlink file.\nSource: {sourcePath}\nTarget: {dotFile.Target}\nReason: {ex.Message}", ex);
             }
         }
     }

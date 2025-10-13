@@ -28,5 +28,30 @@ namespace Rucksack.Utils.Path
             var info = new FileInfo(path);
             return info.Exists && info.LinkTarget != null;
         }
+
+        // Check if the file already exists
+        static public bool FileExists(string targetPath)
+        {
+            return File.Exists(targetPath) || Directory.Exists(targetPath);
+        }
+
+        //TODO: Refacotr this to be more robust
+        // Checks if the target path symlinks to the source file
+        static public bool LinksTo(string targetPath, string source)
+        {
+            if (File.Exists(targetPath))
+            {
+                var fileInfo = new FileInfo(targetPath);
+                return fileInfo.LinkTarget == source;
+            }
+
+            if (Directory.Exists(targetPath))
+            {
+                var dirInfo = new DirectoryInfo(targetPath);
+                return dirInfo.LinkTarget == source;
+            }
+
+            return false;
+        }
     }
 }

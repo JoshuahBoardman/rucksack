@@ -6,6 +6,7 @@ namespace Rucksack.Services.Registry
     {
         public RegistryService()
         {
+            //TODO: Might want to do a diff check between registry and manifest to see if the state has change and can use for verbose wording
 
         }
     }
